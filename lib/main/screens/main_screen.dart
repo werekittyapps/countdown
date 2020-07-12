@@ -1,31 +1,228 @@
 import 'package:countdown/main/providers/main_provider.dart';
+import 'package:countdown/global_values.dart' as global;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    global.displayWidth = MediaQuery.of(context).size.width;
+    global.displayWidth = MediaQuery.of(context).size.height;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (_) => MainProvider(),
         ),
       ],
-      child: BidsModifier(),
+      child: _MainScreen(),
     );
   }
 }
 
-class BidsModifier extends StatefulWidget {
+class _MainScreen extends StatefulWidget {
   @override
-  _BidsModifierScreenState createState() => _BidsModifierScreenState();
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _BidsModifierScreenState extends State<BidsModifier> {
+class _MainScreenState extends State<_MainScreen> {
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<MainProvider>(context);
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Countdown'),
+      ),
+      body: Stack(children: [
+        ListView(children: [
+          Container(
+              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 6),
+              alignment: Alignment.center,
+              child: Text(
+                provider.target == 0 ? 'Common!': provider.target.toString(),
+                style: TextStyle(fontSize: 24.0),
+              )
+          ),
+          InkWell(
+            child: Container(
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height / 6,
+                  left: MediaQuery.of(context).size.width / 5,
+                  right: MediaQuery.of(context).size.width / 5
+              ),
+              height: 40.0,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Theme.of(context).hintColor, width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              child: Text('LET\'S COUNTDOWN'),
+            ),
+            onTap: () {
+              provider.setTarget();
+            },
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 20.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 40.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).hintColor, width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Center(
+                      child: Text(
+                          provider.numberOne == 0 ? '' : provider.numberOne.toString(),
+                          style: TextStyle(fontSize: 24.0)),
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Container(
+                    height: 40.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).hintColor, width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Center(
+                      child: Text(
+                          provider.numberTwo == 0 ? '' : provider.numberTwo.toString(),
+                          style: TextStyle(fontSize: 24.0)),
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Container(
+                    height: 40.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).hintColor, width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Center(
+                      child: Text(
+                          provider.numberThree == 0 ? '' : provider.numberThree.toString(),
+                          style: TextStyle(fontSize: 24.0)),
+                    ),
+                  ),
+                ]),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 20.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 40.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).hintColor, width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Center(
+                      child: Text(
+                          provider.numberFour == 0 ? '' : provider.numberFour.toString(),
+                          style: TextStyle(fontSize: 24.0)),
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Container(
+                    height: 40.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).hintColor, width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Center(
+                      child: Text(
+                          provider.numberFive == 0 ? '' : provider.numberFive.toString(),
+                          style: TextStyle(fontSize: 24.0)),
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Container(
+                    height: 40.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).hintColor, width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Center(
+                      child: Text(
+                          provider.numberSix == 0 ? '' : provider.numberSix.toString(),
+                          style: TextStyle(fontSize: 24.0)),
+                    ),
+                  ),
+                ]),
+          ),
+        ]),
+        if (!provider.allSet)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: InkWell(
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 10.0, left: 20.0),
+                        padding: EdgeInsets.all(5.0),
+                        alignment: Alignment.center,
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Theme.of(context).hintColor, width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        child: Text(
+                            'Добавить большое',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16.0)),
+                      ),
+                      onTap: () {
+                        provider.setBigOne();
+                      },
+                    ),
+                  ),
+                  Expanded(flex: 5, child: SizedBox(height: 50.0)),
+                  Expanded(
+                    flex: 6,
+                    child: InkWell(
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 10.0, right: 20.0),
+                        padding: EdgeInsets.all(5.0),
+                        alignment: Alignment.center,
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Theme.of(context).hintColor, width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        child: Container(
+                          child: Text(
+                              'Добавить маленькое',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16.0)),
+                        ),
+                      ),
+                      onTap: () {
+                        provider.setLittleOne();
+                      },
+                    ),
+                  ),
+                ]),
+          ),
+        if (provider.allSet)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: InkWell(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 10.0),
+                height: 40.0,
+                width: 40.0,
+                child: Icon(Icons.refresh, size: 36.0),
+              ),
+              onTap: () {
+                provider.refresh();
+              },
+            ),
+          )
+      ]),
+    );
   }
 }
