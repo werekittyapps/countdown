@@ -116,7 +116,7 @@ class MainProvider with ChangeNotifier {
       solution = [];
       tempTarget = 0;
       for (int i = 0; i < steps; i++) {
-        /// + - * / without ()
+        /// + - * /
         if (i == 0) {
           tempTarget = tempNumbers[i];
         } else {
