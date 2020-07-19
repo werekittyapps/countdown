@@ -57,8 +57,9 @@ class _MainScreenState extends State<_MainScreen> {
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               child: Text('LET\'S COUNTDOWN'),
             ),
-            onTap: () {
-              provider.setTarget();
+            onTap: provider.numbers.length != 6 ? null : () {
+              provider.setTargetWithSolution();
+              /// provider.setTarget();
             },
           ),
           Container(
