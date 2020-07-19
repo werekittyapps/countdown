@@ -75,7 +75,7 @@ class _MainScreenState extends State<_MainScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Center(
                       child: Text(
-                          provider.numberOne == 0 ? '' : provider.numberOne.toString(),
+                          provider.numbers.length < 1 ? '' : provider.numbers[0].toString(),
                           style: TextStyle(fontSize: 24.0)),
                     ),
                   ),
@@ -88,7 +88,7 @@ class _MainScreenState extends State<_MainScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Center(
                       child: Text(
-                          provider.numberTwo == 0 ? '' : provider.numberTwo.toString(),
+                          provider.numbers.length < 2 ? '' : provider.numbers[1].toString(),
                           style: TextStyle(fontSize: 24.0)),
                     ),
                   ),
@@ -101,7 +101,7 @@ class _MainScreenState extends State<_MainScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Center(
                       child: Text(
-                          provider.numberThree == 0 ? '' : provider.numberThree.toString(),
+                          provider.numbers.length < 3 ? '' : provider.numbers[2].toString(),
                           style: TextStyle(fontSize: 24.0)),
                     ),
                   ),
@@ -121,7 +121,7 @@ class _MainScreenState extends State<_MainScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Center(
                       child: Text(
-                          provider.numberFour == 0 ? '' : provider.numberFour.toString(),
+                          provider.numbers.length < 4 ? '' : provider.numbers[3].toString(),
                           style: TextStyle(fontSize: 24.0)),
                     ),
                   ),
@@ -134,7 +134,7 @@ class _MainScreenState extends State<_MainScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Center(
                       child: Text(
-                          provider.numberFive == 0 ? '' : provider.numberFive.toString(),
+                          provider.numbers.length < 5 ? '' : provider.numbers[4].toString(),
                           style: TextStyle(fontSize: 24.0)),
                     ),
                   ),
@@ -147,14 +147,14 @@ class _MainScreenState extends State<_MainScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Center(
                       child: Text(
-                          provider.numberSix == 0 ? '' : provider.numberSix.toString(),
+                          provider.numbers.length < 6 ? '' : provider.numbers[5].toString(),
                           style: TextStyle(fontSize: 24.0)),
                     ),
                   ),
                 ]),
           ),
         ]),
-        if (!provider.allSet)
+        if (provider.numbers.length != 6)
           Align(
             alignment: Alignment.bottomCenter,
             child: Row(
@@ -207,7 +207,7 @@ class _MainScreenState extends State<_MainScreen> {
                   ),
                 ]),
           ),
-        if (provider.allSet)
+        if (provider.numbers.length == 6)
           Align(
             alignment: Alignment.bottomCenter,
             child: InkWell(
