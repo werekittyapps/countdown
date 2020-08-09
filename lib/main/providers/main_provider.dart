@@ -1,8 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class MainProvider with ChangeNotifier {
   int _target = 0;
+  int _testTrigger;
   List<int> _numbers = [];
   Random _random = new Random();
 
@@ -14,8 +16,16 @@ class MainProvider with ChangeNotifier {
     return _target;
   }
 
+  int get testTrigger {
+    return _testTrigger;
+  }
+
   List get numbers {
     return [..._numbers];
+  }
+
+  Random get random {
+    return _random;
   }
 
   getData() async {
@@ -48,14 +58,16 @@ class MainProvider with ChangeNotifier {
           result = '$result + ${numbers[i + 1]}';
           break;
         case 1:
-          if (i == 0) {
+          /// if (i == 0) {
+          if (i == 0 || code[i - 1] == 1 || code[i - 1] == 2) {
             result = '${numbers[i + 1]} - $result';
           } else {
             result = '${numbers[i + 1]} - ($result)';
           }
           break;
         case 2:
-          if (i == 0 || code[i - 1] == 2) {
+          ///if (i == 0 || code[i - 1] == 2) {
+          if (i == 0 || code[i - 1] == 1 || code[i - 1] == 2) {
             result = '$result - ${numbers[i + 1]}';
           } else {
             result = '($result) - ${numbers[i + 1]}';
@@ -84,6 +96,50 @@ class MainProvider with ChangeNotifier {
           break;
       }
     }
+    //850
+    //flutter: SOLUTION IS VALID: false
+    //flutter: (50 - 7 - 1 - 10) * 25
+    print('SOLUTION IS VALID: ${isSolutionValid(solution: result.replaceAll(' ', ''))}');
+    return result;
+  }
+
+  bool isValid({@required int func, @required int res, @required int temp}) {
+    bool result = true;
+    switch (func) {
+      case 1:
+        if (temp - res < 0) {
+          result = false;
+        }
+        break;
+      case 2:
+        if (res - temp < 0) {
+          result = false;
+        }
+        break;
+      case 4:
+        try {
+          _testTrigger = (temp / res) as int;
+        } catch (e) {
+          result = false;
+        }
+        break;
+      case 5:
+        try {
+          _testTrigger = (res / temp) as int;
+        } catch (e) {
+          result = false;
+        }
+        break;
+    }
+    return result;
+  }
+
+  bool isSolutionValid({@required String solution}) {
+    bool result = false;
+    Parser p = new Parser();
+    Expression exp = p.parse(solution);
+    int temp = int.parse(exp.evaluate(EvaluationType.REAL, null).toString().split('.')[0]);
+    if (temp == _target) result = true;
     return result;
   }
 
@@ -93,17 +149,7 @@ class MainProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  setTarget() async {
-    _target = 0;
-
-    while (_target < 100) {
-      _target = _random.nextInt(1000);
-      print(_target);
-    }
-    notifyListeners();
-  }
-
-  setTargetWithSolution() {
+  setTargetWithSolution2() {
     int tempTarget = 0;
     int steps = 4 + _random.nextInt(3);
     List<int> tempNumbers = [];
@@ -175,6 +221,70 @@ class MainProvider with ChangeNotifier {
     }
     print(getSolution(numbers: tempNumbers, code: solution));
     _target = tempTarget;
+    notifyListeners();
+  }
+
+  setTargetWithSolution({@required int steps}) {
+    int result = 0;
+    List<int> tempNumbers = [];
+    List<int> solution = [];
+
+    _numbers.forEach((value) {
+      tempNumbers.add(value);
+    });
+    tempNumbers.shuffle();
+
+    while (result < 100 || result > 999) {
+      solution = [];
+      result = 0;
+
+      for (int i = 0; i < steps; i++) {
+        /// + - * /
+        if (i == 0) {
+          result = tempNumbers[0];
+        } else {
+          bool validOne = isValid(func: 1, res: result, temp: tempNumbers[i]);
+          bool validTwo = isValid(func: 2, res: result, temp: tempNumbers[i]);
+          bool validFour = isValid(func: 4, res: result, temp: tempNumbers[i]);
+          bool validFive = isValid(func: 5, res: result, temp: tempNumbers[i]);
+          int mode = _random.nextInt(6);
+
+          while ((!validOne && mode == 1) || (!validTwo && mode == 2) || (!validFour && mode == 4) || (!validFive && mode == 5)) {
+            mode = _random.nextInt(6);
+          }
+
+          switch (mode) {
+            case 0:
+              result = tempNumbers[i] + result;
+              solution.add(0);
+              break;
+            case 1:
+              result = tempNumbers[i] - result;
+              solution.add(1);
+              break;
+            case 2:
+              result = result - tempNumbers[i];
+              solution.add(2);
+              break;
+            case 3:
+              result = tempNumbers[i] * result;
+              solution.add(3);
+              break;
+            case 4:
+              result = (tempNumbers[i] / result) as int;
+              solution.add(4);
+              break;
+            case 5:
+              result = (result / tempNumbers[i]) as int;
+              solution.add(5);
+              break;
+          }
+        }
+      }
+      print(result);
+    }
+    _target = result;
+    print(getSolution(numbers: tempNumbers, code: solution));
     notifyListeners();
   }
 

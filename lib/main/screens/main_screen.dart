@@ -1,3 +1,4 @@
+import 'package:countdown/functions/orientations.dart';
 import 'package:countdown/main/providers/main_provider.dart';
 import 'package:countdown/global_values.dart' as global;
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    setPortrait();
     global.displayWidth = MediaQuery.of(context).size.width;
     global.displayWidth = MediaQuery.of(context).size.height;
     return MultiProvider(
@@ -58,7 +60,7 @@ class _MainScreenState extends State<_MainScreen> {
               child: Text('LET\'S COUNTDOWN'),
             ),
             onTap: provider.numbers.length != 6 ? null : () {
-              provider.setTargetWithSolution();
+              provider.setTargetWithSolution(steps: (4 + provider.random.nextInt(3)));
               /// provider.setTarget();
             },
           ),
